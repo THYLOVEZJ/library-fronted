@@ -5,17 +5,12 @@
       <el-form-item label="用户名">
         <el-input v-model="form.username" placeholder="请输入用户名"></el-input>
       </el-form-item>
-      <el-form-item label="年龄">
-        <el-input v-model="form.age" placeholder="请输入用户名"></el-input>
-      </el-form-item>
-      <el-form-item label="性别">
-        <el-input v-model="form.sex" placeholder="请输入性别"></el-input>
-      </el-form-item>
+
       <el-form-item label="联系方式">
         <el-input v-model="form.phone" placeholder="请输入联系方式"></el-input>
       </el-form-item>
-      <el-form-item label="地址">
-        <el-input v-model="form.address" placeholder="请输入地址"></el-input>
+      <el-form-item label="邮箱">
+        <el-input v-model="form.email" placeholder="请输入邮箱"></el-input>
       </el-form-item>
       <el-form-item label="密码">
         <el-input v-model="form.password" placeholder="请输入密码" type="password"></el-input>
@@ -32,7 +27,7 @@
 import request from "@/utils/request";
 
 export default {
-  name: 'EditUser',
+  name: 'EditAdmin',
   data() {
     return {
       form: {}
@@ -40,16 +35,16 @@ export default {
   },
   created() {
     const id = this.$route.query.id
-    request("/user/" + id).then(res => {
+    request("/admin/" + id).then(res => {
       this.form = res.data
     })
   },
   methods: {
     save() {
-      request.put("/user/update", this.form).then(res => {
+      request.put("/admin/update", this.form).then(res => {
         if (res.code === '200') {
           this.$notify.success('更新成功')
-          this.$router.push("/user")
+          this.$router.push("/admin")
         } else {
           this.$notify.error(res.msg)
         }

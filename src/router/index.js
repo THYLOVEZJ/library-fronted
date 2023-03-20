@@ -10,6 +10,7 @@ const routes = [
         name: 'Home',
         component: Home
     },
+    // user
     {
         path: '/user',
         name: 'User',
@@ -24,6 +25,22 @@ const routes = [
         path: '/editUser',
         name: 'editUser',
         component: () => import('@/views/user/editUser')
+    },
+    // admin
+    {
+        path: '/admin',
+        name: 'Admin',
+        component: () => import('@/views/admin/Admin')
+    },
+    {
+        path: '/addAdmin',
+        name: 'AddAdmin',
+        component: () => import('@/views/admin/addAdmin')
+    },
+    {
+        path: '/editadmin',
+        name: 'editAdmin',
+        component: () => import('@/views/admin/editAdmin')
     }
 ]
 

@@ -15,10 +15,19 @@
           <el-menu-item index="/"><i class="el-icon-s-home"></i><span>首页</span></el-menu-item>
           <el-submenu>
             <template slot="title">
+              <i class="el-icon-question"></i>
               <span>会员管理</span>
             </template>
             <el-menu-item index="addUser">会员添加</el-menu-item>
             <el-menu-item index="user">会员列表</el-menu-item>
+          </el-submenu>
+          <el-submenu>
+            <template slot="title">
+              <i class="el-icon-user"></i>
+              <span>管理员管理</span>
+            </template>
+            <el-menu-item index="admin">管理员列表</el-menu-item>
+            <el-menu-item index="addAdmin">管理员添加</el-menu-item>
           </el-submenu>
         </el-menu>
       </div>
