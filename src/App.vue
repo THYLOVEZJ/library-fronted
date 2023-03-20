@@ -15,9 +15,10 @@
           <el-menu-item index="/"><i class="el-icon-s-home"></i><span>首页</span></el-menu-item>
           <el-submenu>
             <template slot="title">
-              关于页面
+              <span>会员管理</span>
             </template>
-            <el-menu-item>关于详情</el-menu-item>
+            <el-menu-item index="addUser">会员添加</el-menu-item>
+            <el-menu-item index="user">会员列表</el-menu-item>
           </el-submenu>
         </el-menu>
       </div>
