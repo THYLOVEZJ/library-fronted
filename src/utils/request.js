@@ -33,7 +33,7 @@ request.interceptors.response.use(
         }
         if (res.code === '401') {
             router.push('/login')
-            this.$notify.error(res.msg)
+            console.log("登陆失败")
         }
         return res;
     },

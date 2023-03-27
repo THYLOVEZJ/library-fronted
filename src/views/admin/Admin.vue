@@ -15,7 +15,17 @@
       <el-table-column prop="password" label="密码"></el-table-column>
       <el-table-column prop="email" label="邮箱"></el-table-column>
       <el-table-column prop="phone" label="电话"></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column prop="state" label="状态">
+        <template v-slot="scope">
+          <el-switch
+              v-model="scope.row.state"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              @change="changeSwitch(scope.row)">
+          </el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" width="300">
         <template v-slot="scope">
           <!--scope.row就是当前行数据-->
           <el-button type="primary" @click="$router.push('/editAdmin?id='+scope.row.id)">编辑</el-button>
@@ -29,6 +39,7 @@
               style="padding-left: 5px"
           >
             <el-button slot="reference" type="danger">删除</el-button>
+            <el-button slot="reference" type="warning" @click="handleChangePass(scope.row)">修改密码</el-button>
           </el-popconfirm>
         </template>
       </el-table-column>
@@ -46,24 +57,46 @@
       >
       </el-pagination>
     </div>
+
+    <el-dialog title="修改密码" :visible.sync="dialogTableVisible" width="500px">
+      <el-form :model="form" :rules="rules" ref="formRef">
+        <el-form-item label="新密码" prop="newPass">
+          <el-input v-model="form.newPass" auto-complete="off" show-password></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogTableVisible = false">取 消</el-button>
+        <el-button type="primary" @click="savePass">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 
 <script>
 import request from "@/utils/request";
+import Cookies from "js-cookie";
 
 export default {
   name: 'Admin',
   data() {
     return {
+      admin: Cookies.get('admin') ? JSON.parse(Cookies.get('admin')) : {},
       tableData: [],
       total: 0,
+      dialogTableVisible: false,
+      form: {},
       params: {
         pageNum: 1,
         pageSize: 10,
         username: "",
         phone: "",
+      },
+      rules: {
+        newPass: [
+          {required: true, message: '请输入新密码', trigger: 'blur'},
+          {min: 3, max: 10, message: '长度在3-10个字符', trigger: blur},
+        ],
       }
     }
   },
@@ -72,10 +105,6 @@ export default {
   },
   methods: {
     load() {
-      // fetch("http://localhost:8081/user/all").then(res => res.json()).then(res => {
-      //   console.log(res)
-      //   this.tableData = res
-      // })
       request.get('/admin/page', {
         params: this.params
       }).then(res => {
@@ -108,6 +137,49 @@ export default {
           this.$notify.error("删除失败")
         }
       })
+    },
+    handleChangePass(row) {
+      this.dialogTableVisible = true;
+      this.form = JSON.parse(JSON.stringify(row))
+    },
+    savePass() {
+      this.$refs['formRef'].validate((valid) => {
+        if (valid) {
+          request.put('/admin/password', this.form).then(res => {
+            if (res.code === '200') {
+
+              if (this.form.id === this.admin.id) { // 当前修改的id等于当前登录的id
+                Cookies.remove('admin')
+                this.$router.push('/login')
+                this.$notify.warning('修改成功，请重新登录')
+              } else {
+                this.load()
+                this.$notify.success("修改成功")
+                this.dialogTableVisible = false
+              }
+            } else {
+              this.$notify.error('修改失败')
+            }
+          })
+          this.dialogTableVisible = false
+        }
+      })
+    },
+    changeSwitch(row) {
+      this.form = JSON.parse(JSON.stringify(row))
+      if (row.id !== this.admin.id) {
+        request.put("/admin/update", row).then(res => {
+          if (res.code === '200') {
+            this.$notify.success('更新成功')
+            this.load()
+          } else {
+            this.$notify.error(res.msg)
+          }
+        })
+      } else {
+        this.$notify.warning("操作不合法")
+        this.load()
+      }
     }
   }
 }

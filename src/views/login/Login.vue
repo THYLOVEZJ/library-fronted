@@ -1,5 +1,21 @@
 <template>
+
+
   <div style="height: 100vh;overflow: hidden">
+
+    <el-card class="cover" v-if="admin.id">
+      <slide-verify :l="42"
+                    :r="10"
+                    :w="310"
+                    :h="155"
+                    :accuracy="5"
+                    slider-text="向右滑动"
+                    @success="onSuccess"
+                    @fail="onFail"
+                    @refresh="onRefresh"
+      ></slide-verify>
+    </el-card>
+
     <div style="width: 500px;height: 400px;border-radius: 10px;background-color: white;margin:150px auto;padding: 50px">
       <el-form :model="admin" ref="login" :rules="rules">
         <div style="margin:30px;text-align: center;font-size: x-large;color: dodgerblue">登 录</div>
@@ -23,6 +39,7 @@
 <script>
 import request from "@/utils/request";
 import Cookies from "js-cookie"
+import admin from "@/views/admin/Admin";
 
 export default {
   name: "Login",
@@ -45,23 +62,38 @@ export default {
         if (valid) {
           request.post("/admin/login", this.admin).then(res => {
             if (res.code === '200') {
-              console.log("hi")
-              this.$notify.success("登录成功")
-              if (res.data != null){
-                console.log("hi")
-                Cookies.set('admin', JSON.stringify(res.data))
-              }
-              this.$router.push("/")
+              this.admin = res.data
             } else {
-              this.$notify.error(res.msg)
+              this.$notify.warning(res.msg)
             }
           })
         } else {
           this.$notify.warning("请检查表单")
         }
       })
+    },
+    onSuccess() {
+      Cookies.set('admin', JSON.stringify(this.admin))
+      this.$router.push('/')
+    },
+    onFail() {
+
+    },
+    onRefresh() {
+      console.log('refresh')
     }
-  }
+  },
 }
 </script>
 
+<style scoped>
+.cover {
+  width: fit-content;
+  background-color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+</style>
