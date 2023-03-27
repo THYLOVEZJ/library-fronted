@@ -8,7 +8,7 @@
       <el-form-item label="联系方式" prop="phone">
         <el-input v-model="form.phone" placeholder="请输入联系方式"></el-input>
       </el-form-item>
-      <el-form-item label="地址" prop="email">
+      <el-form-item label="邮箱" prop="email">
         <el-input v-model="form.email" placeholder="请输入邮箱"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password">
@@ -52,7 +52,6 @@ export default {
     }
   },
   created() {
-    this.load()
   },
   methods: {
     save() {

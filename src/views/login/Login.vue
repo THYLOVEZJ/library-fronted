@@ -8,7 +8,7 @@
                     v-model="admin.username"></el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input placeholder="请输入密码" prefix-icon="el-icon-key" size="medium" type="password"
+          <el-input placeholder="请输入密码" prefix-icon="el-icon-key" size="medium" show-password
                     v-model="admin.password"></el-input>
         </el-form-item>
         <el-form-item>
@@ -22,6 +22,7 @@
 
 <script>
 import request from "@/utils/request";
+import Cookies from "js-cookie"
 
 export default {
   name: "Login",
@@ -44,7 +45,12 @@ export default {
         if (valid) {
           request.post("/admin/login", this.admin).then(res => {
             if (res.code === '200') {
+              console.log("hi")
               this.$notify.success("登录成功")
+              if (res.data != null){
+                console.log("hi")
+                Cookies.set('admin', JSON.stringify(res.data))
+              }
               this.$router.push("/")
             } else {
               this.$notify.error(res.msg)

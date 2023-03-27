@@ -61,7 +61,6 @@ export default {
     }
   },
   created() {
-    this.load()
   },
   methods: {
     save() {
