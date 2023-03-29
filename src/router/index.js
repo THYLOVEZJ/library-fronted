@@ -54,7 +54,23 @@ const routes = [
                 path: 'editadmin',
                 name: 'editAdmin',
                 component: () => import('@/views/admin/editAdmin')
-            }
+            },
+            // category
+            {
+                path: 'category',
+                name: 'Category',
+                component: () => import('@/views/category/Category')
+            },
+            {
+                path: 'addCategory',
+                name: 'AddCategory',
+                component: () => import('@/views/category/addCategory')
+            },
+            {
+                path: 'editCategory',
+                name: 'editCategory',
+                component: () => import('@/views/category/editCategory')
+            },
         ]
     },
     {
@@ -69,7 +85,7 @@ const router = new VueRouter({
     routes
 })
 
-router.beforeEach((to,from,next)=>{
+router.beforeEach((to, from, next) => {
     if (to.path === '/login') next()
     const admin = Cookies.get("admin")
     if (!admin && to.path !== '/login') return next('/login')
