@@ -71,6 +71,21 @@ const routes = [
                 name: 'editCategory',
                 component: () => import('@/views/category/editCategory')
             },
+            {
+                path: 'book',
+                name: 'Book',
+                component: () => import('@/views/book/Book')
+            },
+            {
+                path: 'addBook',
+                name: 'AddBook',
+                component: () => import('@/views/book/addBook')
+            },
+            {
+                path: 'editBook',
+                name: 'editBook',
+                component: () => import('@/views/book/editBook')
+            },
         ]
     },
     {
